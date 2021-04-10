@@ -1,0 +1,124 @@
+---
+title: "STAT 413/613 Homework: Tidy Text"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: no
+    toc_depth: 4
+    number_sections: yes
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.align  = "center",
+                      fig.height = 5, 
+                      fig.width  = 6)
+```
+
+# Instructions {-}
+1. Clone this homework repo to your homework directory as a new repo.
+2. Rename the starter file under the analysis directory as `hw_01_yourname.Rmd` and use it for your solutions.   
+3. Modify the "author" field in the YAML header.  
+4. Stage and Commit R Markdown and HTML files (no PDF files).   
+5. **Push both .Rmd and HTML files to GitHub**.   
+- Make sure you have knitted to HTML prior to staging, committing, and pushing your final submission.  
+6. **Commit each time you answer a part of question, e.g. 1.1**   
+7. **Push to GitHub after each major question**   
+8. When complete, submit a response in Canvas  
+
+- Only include necessary code to answer the questions.
+- Most of the functions you use should be from the tidyverse. 
+- Unnecessary Base R or other packages not covered in class will result in point deductions.
+- Use Pull requests and or email to ask me any questions. If you email, please ensure your most recent code is pushed to GitHub.
+
+
+# Sentiment Analysis
+
+1. Download the following two works from the early 20^th^ century from Project Gutenberg:
+- Upton Sinclair: "*The Jungle*" (1906)
+- W.E.B. Du Bois: "*The Quest of the Silver Fleece*" (1911)
+  
+
+2. Write a function `to take an argument of a downloaded book tibble and return it in tidy text format.
+- The function must add line and chapter numbers as variables
+- The function must unnest tokens at the word level
+- The function must remove any Project Gutenberg formatting so only the words remain
+- The function must remove any stop_words and filter out any `NA`s
+- The function must remove any front matter (words before Chapter 1)
+- The function can consider the unique nature of the front matter but cannot consider exactly how many chapters are in each book based on looking at the data i.e., no math based on knowing the number of chapters. 
+   
+
+3. Use the function from step 2
+- Tidy each book and then add `book` and `author` as variables and save each tibble to a new variable. How many rows are in each book?
+
+4. Use a dplyr function to combine the two tibbles into a new tibble. 
+- It should have 89,434 rows with 6 variables
+
+
+5. Measure the net sentiment using bing for each block of 50 lines
+- Plot the sentiment for each book in an appropriate faceted plot - either line or column. 
+- Be sure to remove the legend.
+- Save the plot to a variable
+- Interpret the plots for each book and compare them.
+
+6. Measure the total for each nrc sentiment in each block of 500 lines and then,
+- Filter out the "positive" and "negative" and save to a new variable. You should have 464 observations.
+- Plot the count of the sentiments for each block in each book in an appropriate faceted plot with the books in two columns and the sentiments in 8 rows. 
+- Be sure to remove the legend.
+- Interpret the plots for each book and then compare them. 
+- Why did the values drop off so suddenly at the end?
+
+7. Using bing, create a new data frame with the counts of the positive and negative sentiment words for each book.
+- Show the "top 20" most frequent words across both books along with their book, sentiment, and count, in descending order by count.
+- What are the positive words in the list of "top 20"?
+
+8. Plot the top ten for each positive and negative sentiment faceting by book.
+- Ensure each facet has the words in the proper order for that book.
+- Identify any that may be inappropriate for the context of the book and should be excluded from the sentiment analysis.
+
+9. Remove the inappropriate word(s) from the analysis.
+- Replot the top 10 for each sentiment per book from step 8.
+- Interpret the plots
+
+10. Rerun the analysis from step 5 and recreate the plot with the title "Custom Bing".
+- Show both the original step 5 plot with the new plot in the same output graphic, one on top of the other.
+- Interpret the plots
+
+# tf-idf for Mark Twain's books
+
+1. Use a single call to download all the following complete books at once from author Mark Twain from Project Gutenberg
+- Use the meta_fields argument to include the Book title as part of the download
+- *Huckleberry Finn*,  *Tom Sawyer* , *Connecticut Yankee in King Arthur's Court*, *Life on the Mississippi* , *Prince and the Pauper*,  and *A Tramp Abroad* 
+
+2. Modify your earlier function or create a new one to output a tf-idf ready dataframe (**leave the the stop words in the text**)
+- Unnest, remove any formatting, and get rid of any `NA`s  
+- Add the count for each word by title.
+- Use your function to tidy the downloaded texts and save to a variable. It should have 56,759 rows.
+
+3. Calculate the tf-idf
+- Save back to the data frame.
+
+4. Plot the tf for each book using a faceted graph.
+- Facet by book and constrain the data or the X axis to see the shape of the distribution.
+   
+5. Show the words with the 15 highest tf-idfs across across all books
+- Only show those rows.
+- How many look like possible names?
+   
+6.  Plot the top 7 tf_idf words from each book.
+- Sort in descending order of tf_idf
+- Interpret the plots.
+
+# Extra Credit Podcasts
+
+- Choose **One** of the following podcasts and answer the questions below:  
+
+a. [Sentiment Preserving Fake Reviews](https://podcasts.apple.com/us/podcast/data-skeptic/id890348705?i=1000483067378)  
+The [Original paper](https://arxiv.org/abs/1907.09177)
+
+b. [Data in  Life: Authorship Attribution in Lennon-McCartney Songs](https://podcasts.apple.com/us/podcast/authorship-attribution-of-lennon-mccartney-songs/id890348705?i=1000485519404)
+
+1. What are some key ideas from this podcast relevant to text sentiment analysis/authorship attribution?
+
+2. How do you think the ideas discussed may be relevant in your future work?
