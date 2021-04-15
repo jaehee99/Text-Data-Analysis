@@ -118,10 +118,18 @@ jungle_function(jungle) %>%
   mutate(book = "The Jungle") -> new_jungle
 nrow(new_jungle)
 ```
-
 ```{r}
 silver_function(silver) %>%  
  mutate(author = "W.E.B. Du Bois") %>%  
   mutate(book = "The Quest of the Silver Fleece: A Novel") -> new_silver
 nrow(new_silver)
 ```
+
+4. Use a dplyr function to combine the two tibbles into a new tibble. 
+- It should have 89,434 rows with 6 variables
+```{r}
+bind_rows(mutate(new_jungle, author = "Upton Sinclair"), 
+          mutate(new_silver, author = "W.E.B. Du Bois")) -> jungle_silver
+nrow(jungle_silver)
+```
+

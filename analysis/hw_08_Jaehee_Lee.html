@@ -203,6 +203,110 @@ pre code {
 <li>Use Pull requests and or email to ask me any questions. If you email, please ensure your most recent code is pushed to GitHub.</li>
 </ul>
 </div>
+<div id="sentiment-analysis" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Sentiment Analysis</h1>
+<p>Load library</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.1.0     ✓ dplyr   1.0.5
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(tidytext)
+library(stringr)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Download the following two works from the early 20<sup>th</sup> century from Project Gutenberg:</li>
+</ol>
+<ul>
+<li>Upton Sinclair: “<em>The Jungle</em>” (1906)</li>
+<li>W.E.B. Du Bois: “<em>The Quest of the Silver Fleece</em>” (1911)</li>
+</ul>
+<pre class="r"><code>library(gutenbergr)</code></pre>
+<pre class="r"><code># Upton Sinclair: &quot;*The Jungle*&quot; (1906)
+gutenberg_works() %&gt;%  
+  filter(title == &quot;The Jungle&quot;) %&gt;%  
+  select(gutenberg_id) -&gt; jungle_id
+gutenberg_download(jungle_id) -&gt; jungle</code></pre>
+<pre><code>## Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest</code></pre>
+<pre><code>## Using mirror http://aleph.gutenberg.org</code></pre>
+<pre class="r"><code># W.E.B. Du Bois: &quot;*The Quest of the Silver Fleece*&quot; (1911)
+gutenberg_works() %&gt;%  
+  filter(title == &quot;The Quest of the Silver Fleece: A Novel&quot;)  %&gt;% 
+  select(gutenberg_id) -&gt; silver_id
+gutenberg_download(silver_id) -&gt; silver</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Write a function `to take an argument of a downloaded book tibble and return it in tidy text format.</li>
+</ol>
+<ul>
+<li>The function must add line and chapter numbers as variables</li>
+<li>The function must unnest tokens at the word level</li>
+<li>The function must remove any Project Gutenberg formatting so only the words remain</li>
+<li>The function must remove any stop_words and filter out any <code>NA</code>s</li>
+<li>The function must remove any front matter (words before Chapter 1)</li>
+<li>The function can consider the unique nature of the front matter but cannot consider exactly how many chapters are in each book based on looking at the data i.e., no math based on knowing the number of chapters.</li>
+</ul>
+<pre class="r"><code>jungle_function &lt;- function(jungle){
+  jungle %&gt;%  
+  mutate(linenumber = row_number()) %&gt;%  
+  mutate(chapter = cumsum(str_detect(text, regex(&quot;^CHAPTER [\\divxlc]&quot;,ignore_case = TRUE)))) %&gt;%  
+     ungroup() %&gt;% 
+  select(chapter, linenumber, everything()) -&gt; jungle
+  jungle &lt;- jungle[-(1:51), , drop = FALSE]
+  
+  jungle%&gt;% 
+    unnest_tokens(word,text) %&gt;%
+    mutate(word = str_extract(word, &quot;[a-z&#39;]+&quot;)) %&gt;%
+    anti_join(stop_words, by = &quot;word&quot;) %&gt;%  
+  drop_na() -&gt; jungle_jungle
+  return(jungle_jungle)
+}
+# jungle_function(jungle)</code></pre>
+<pre class="r"><code>silver_function &lt;- function(silver){
+silver %&gt;%  
+  mutate(linenumber = row_number()) %&gt;%  
+  mutate(chapter = cumsum(str_detect(text, regex(&quot;(^_)([a-z]+)([-]{0,1})([a-z]+)(_$)&quot;,ignore_case = TRUE))))  %&gt;%  
+    ungroup() %&gt;% 
+  select(chapter, linenumber, everything())-&gt; silver 
+silver &lt;- silver[-(1:143), , drop = FALSE]
+
+silver %&gt;%  
+  unnest_tokens(word,text) %&gt;% 
+    mutate(word = str_extract(word, &quot;[a-z&#39;]+&quot;)) %&gt;% 
+   anti_join(stop_words, by = &quot;word&quot;) %&gt;%  
+  drop_na()  -&gt; silver_silver
+return(silver_silver)
+}
+# silver_function(silver)</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Use the function from step 2</li>
+</ol>
+<ul>
+<li>Tidy each book and then add <code>book</code> and <code>author</code> as variables and save each tibble to a new variable. How many rows are in each book?</li>
+</ul>
+<pre class="r"><code>jungle_function(jungle) %&gt;%   
+  mutate(author = &quot;Upton Sinclair&quot;) %&gt;%  
+  mutate(book = &quot;The Jungle&quot;) -&gt; new_jungle
+nrow(new_jungle)</code></pre>
+<pre><code>## [1] 47828</code></pre>
+<pre class="r"><code>silver_function(silver) %&gt;%  
+ mutate(author = &quot;W.E.B. Du Bois&quot;) %&gt;%  
+  mutate(book = &quot;The Quest of the Silver Fleece: A Novel&quot;) -&gt; new_silver
+nrow(new_silver)</code></pre>
+<pre><code>## [1] 41606</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Use a dplyr function to combine the two tibbles into a new tibble.</li>
+</ol>
+<ul>
+<li>It should have 89,434 rows with 6 variables</li>
+</ul>
+<pre class="r"><code>bind_rows(mutate(new_jungle, author = &quot;Upton Sinclair&quot;), 
+          mutate(new_silver, author = &quot;W.E.B. Du Bois&quot;)) -&gt; jungle_silver
+nrow(jungle_silver)</code></pre>
+<pre><code>## [1] 89434</code></pre>
+</div>
 
 
 
