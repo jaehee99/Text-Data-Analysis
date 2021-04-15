@@ -182,3 +182,22 @@ bing_pos_neg %>%
     top_n(20) %>%  
     filter(sentiment == "positive") 
 ```
+
+8. Plot the top ten for each positive and negative sentiment faceting by book.
+- Ensure each facet has the words in the proper order for that book.
+- Identify any that may be inappropriate for the context of the book and should be excluded from the sentiment analysis.
+```{r}
+bing_pos_neg %>% 
+  group_by(sentiment, book) %>%  
+  slice_max(order_by = n, n=10) %>%
+  ungroup() %>%  
+  mutate(word = reorder(word, n)) -> data 
+data %>% 
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(sentiment~book, scales = "free_y") +
+  labs(y = "Contribution to sentiment", x = NULL) +
+  coord_flip()
+# I will remove word "hard" in the Jungle and the word "hard" in the The Quest 
+```
+
