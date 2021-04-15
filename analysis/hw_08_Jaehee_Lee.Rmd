@@ -47,11 +47,17 @@ library(stringr)
 - W.E.B. Du Bois: "*The Quest of the Silver Fleece*" (1911)
 ```{r}
 library(gutenbergr)
+```
+
+```{r}
 # Upton Sinclair: "*The Jungle*" (1906)
 gutenberg_works() %>%  
   filter(title == "The Jungle") %>%  
   select(gutenberg_id) -> jungle_id
 gutenberg_download(jungle_id) -> jungle
+```
+
+```{r}
 # W.E.B. Du Bois: "*The Quest of the Silver Fleece*" (1911)
 gutenberg_works() %>%  
   filter(title == "The Quest of the Silver Fleece: A Novel")  %>% 
@@ -59,3 +65,47 @@ gutenberg_works() %>%
 gutenberg_download(silver_id) -> silver
 ```
 
+2. Write a function `to take an argument of a downloaded book tibble and return it in tidy text format.
+- The function must add line and chapter numbers as variables
+- The function must unnest tokens at the word level
+- The function must remove any Project Gutenberg formatting so only the words remain
+- The function must remove any stop_words and filter out any `NA`s
+- The function must remove any front matter (words before Chapter 1)
+- The function can consider the unique nature of the front matter but cannot consider exactly how many chapters are in each book based on looking at the data i.e., no math based on knowing the number of chapters.
+```{r}
+jungle_function <- function(jungle){
+  jungle %>%  
+  mutate(linenumber = row_number()) %>%  
+  mutate(chapter = cumsum(str_detect(text, regex("^CHAPTER [\\divxlc]",ignore_case = TRUE)))) %>%  
+     ungroup() %>% 
+  select(chapter, linenumber, everything()) -> jungle
+  jungle <- jungle[-(1:51), , drop = FALSE]
+  
+  jungle%>% 
+    unnest_tokens(word,text) %>%
+    mutate(word = str_extract(word, "[a-z']+")) %>%
+    anti_join(stop_words, by = "word") %>%  
+  drop_na() -> jungle_jungle
+  return(jungle_jungle)
+}
+# jungle_function(jungle)
+```
+
+```{r}
+silver_function <- function(silver){
+silver %>%  
+  mutate(linenumber = row_number()) %>%  
+  mutate(chapter = cumsum(str_detect(text, regex("(^_)([a-z]+)([-]{0,1})([a-z]+)(_$)",ignore_case = TRUE))))  %>%  
+    ungroup() %>% 
+  select(chapter, linenumber, everything())-> silver 
+silver <- silver[-(1:143), , drop = FALSE]
+
+silver %>%  
+  unnest_tokens(word,text) %>% 
+    mutate(word = str_extract(word, "[a-z']+")) %>% 
+   anti_join(stop_words, by = "word") %>%  
+  drop_na()  -> silver_silver
+return(silver_silver)
+}
+# silver_function(silver)
+```
