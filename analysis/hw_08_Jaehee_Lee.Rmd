@@ -279,3 +279,23 @@ For the Jungle plot,overall this book has more negative words than positive word
 After removing the word miss, Custom bing plot of the book "The Quest of the Silver Fleece: A Novel" has more positive words compared to the original plot. This book also has negative feelings words a lot and based on that characters feel some kind of positive feelings. 
 
 When we compare two books each other, we can say that the book Jungle is much more negative compared to the other one. This is because there are fewer lines above 0 in the Jungle plot than the other Sliver Fleece book plot. 
+
+1. Use a single call to download all the following complete books at once from author Mark Twain from Project Gutenberg
+- Use the meta_fields argument to include the Book title as part of the download
+- *Huckleberry Finn*,  *Tom Sawyer* , *Connecticut Yankee in King Arthur's Court*, *Life on the Mississippi* , *Prince and the Pauper*,  and *A Tramp Abroad* 
+```{r}
+library(gutenbergr)
+
+gutenberg_authors %>%
+  filter(author == "Twain, Mark") %>%
+  select(gutenberg_author_id) -> mark_info
+
+gutenberg_works(gutenberg_author_id == mark_info[[1]]) %>%
+  arrange(title) %>%
+   filter(title %in% c("Adventures of Huckleberry Finn",  "The Adventures of Tom Sawyer" , "A Connecticut Yankee in King Arthur's Court", "Life on the Mississippi" , "The Prince and the Pauper","A Tramp Abroad" )) %>%
+  select(gutenberg_id) -> title_info
+
+title_info[[1]]
+gutenberg_download(c(title_info[[1]]), meta_fields = "title") -> complete_books
+```
+
