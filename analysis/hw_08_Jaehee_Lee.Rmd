@@ -323,3 +323,12 @@ book_words <-  new_function(complete_books)
 book_words %>% 
     bind_tf_idf(word, title, n) -> book_words 
 ```
+
+4. Plot the tf for each book using a faceted graph.
+- Facet by book and constrain the data or the X axis to see the shape of the distribution.
+```{r}
+ggplot(book_words, aes(tf, fill = title)) +
+  geom_histogram(show.legend = FALSE) +
+  xlim(NA, 0.0009) +
+  facet_wrap(~title, ncol = 2, scales = "free_y")
+```
