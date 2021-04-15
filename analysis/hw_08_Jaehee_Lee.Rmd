@@ -65,7 +65,7 @@ gutenberg_works() %>%
 gutenberg_download(silver_id) -> silver
 ```
 
-2. Write a function `to take an argument of a downloaded book tibble and return it in tidy text format.
+2. Write a function 'to take an argument of a downloaded book tibble and return it in tidy text format.'
 - The function must add line and chapter numbers as variables
 - The function must unnest tokens at the word level
 - The function must remove any Project Gutenberg formatting so only the words remain
