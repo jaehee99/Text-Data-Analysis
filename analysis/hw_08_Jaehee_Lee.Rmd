@@ -200,4 +200,20 @@ data %>%
   coord_flip()
 # I will remove word "hard" in the Jungle and the word "hard" in the The Quest 
 ```
+9. Remove the inappropriate word(s) from the analysis.
+- Replot the top 10 for each sentiment per book from step 8.
+- Interpret the plots
+```{r}
+data %>%  
+  filter(word !=  "hard") %>% 
+  group_by(sentiment, book) %>%  
+  slice_max(order_by = n, n=10) %>%
+  ungroup() %>%  
+  mutate(word = reorder(word, n)) %>% 
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(sentiment~book, scales = "free_y") +
+  labs(y = "Contribution to sentiment", x = NULL) +
+  coord_flip()
+```
 
