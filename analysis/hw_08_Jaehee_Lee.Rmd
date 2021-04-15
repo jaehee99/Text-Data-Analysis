@@ -342,7 +342,7 @@ book_words %>%
   head(15) %>%  
   select(word) 
 ```
-becky, huck, canty, joe seem like possible names. Therefore, 4 looks like possible names among the above result.
+hendon, becky, huck, canty, joe seem like possible names. Therefore, 4 looks like possible names among the above result.
 
 6.  Plot the top 7 tf_idf words from each book.
 - Sort in descending order of tf_idf
