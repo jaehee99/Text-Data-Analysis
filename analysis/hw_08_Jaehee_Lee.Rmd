@@ -133,3 +133,21 @@ bind_rows(mutate(new_jungle, author = "Upton Sinclair"),
 nrow(jungle_silver)
 ```
 
+5. Measure the net sentiment using bing for each block of 50 lines
+- Plot the sentiment for each book in an appropriate faceted plot - either line or column. 
+- Be sure to remove the legend.
+- Save the plot to a variable
+- Interpret the plots for each book and compare them.
+```{r}
+jungle_silver %>%  
+  inner_join(get_sentiments("bing")) %>%  
+  count(book, index = linenumber %/% 50, sentiment) %>%  
+  spread(sentiment, n, fill = 0) %>%  
+  mutate(sentiment = positive - negative) %>%  
+  ggplot(aes(index, sentiment, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book, ncol = 2, scales = "free_x") -> compare_sentiment
+
+compare_sentiment
+```
+Interpretation: Both of the books have significantly more negative sentiments compared to positive sentiments. This is because most of the lines are below 0. However, when we compare two graphs, it seems like "The Quest of the Silver Fleece" have more positive words than "the Jungle".
