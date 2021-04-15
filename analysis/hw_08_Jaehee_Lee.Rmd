@@ -109,3 +109,19 @@ return(silver_silver)
 }
 # silver_function(silver)
 ```
+
+3. Use the function from step 2
+- Tidy each book and then add `book` and `author` as variables and save each tibble to a new variable. How many rows are in each book?
+```{r}
+jungle_function(jungle) %>%   
+  mutate(author = "Upton Sinclair") %>%  
+  mutate(book = "The Jungle") -> new_jungle
+nrow(new_jungle)
+```
+
+```{r}
+silver_function(silver) %>%  
+ mutate(author = "W.E.B. Du Bois") %>%  
+  mutate(book = "The Quest of the Silver Fleece: A Novel") -> new_silver
+nrow(new_silver)
+```
