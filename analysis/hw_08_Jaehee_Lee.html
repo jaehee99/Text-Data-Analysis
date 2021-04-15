@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jaehee Lee" />
 
-<meta name="date" content="2021-04-11" />
+<meta name="date" content="2021-04-16" />
 
 <title>STAT 413/613 Homework: Tidy Text</title>
 
@@ -167,7 +167,7 @@ pre code {
 
 <h1 class="title toc-ignore">STAT 413/613 Homework: Tidy Text</h1>
 <h4 class="author">Jaehee Lee</h4>
-<h4 class="date">2021-04-11</h4>
+<h4 class="date">2021-04-16</h4>
 
 </div>
 
@@ -202,146 +202,6 @@ pre code {
 <li>Unnecessary Base R or other packages not covered in class will result in point deductions.</li>
 <li>Use Pull requests and or email to ask me any questions. If you email, please ensure your most recent code is pushed to GitHub.</li>
 </ul>
-</div>
-<div id="sentiment-analysis" class="section level1" number="1">
-<h1 number="1"><span class="header-section-number">1</span> Sentiment Analysis</h1>
-<ol style="list-style-type: decimal">
-<li>Download the following two works from the early 20<sup>th</sup> century from Project Gutenberg:</li>
-</ol>
-<ul>
-<li>Upton Sinclair: “<em>The Jungle</em>” (1906)</li>
-<li>W.E.B. Du Bois: “<em>The Quest of the Silver Fleece</em>” (1911)</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li>Write a function `to take an argument of a downloaded book tibble and return it in tidy text format.</li>
-</ol>
-<ul>
-<li>The function must add line and chapter numbers as variables</li>
-<li>The function must unnest tokens at the word level</li>
-<li>The function must remove any Project Gutenberg formatting so only the words remain</li>
-<li>The function must remove any stop_words and filter out any <code>NA</code>s</li>
-<li>The function must remove any front matter (words before Chapter 1)</li>
-<li>The function can consider the unique nature of the front matter but cannot consider exactly how many chapters are in each book based on looking at the data i.e., no math based on knowing the number of chapters.</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Use the function from step 2</li>
-</ol>
-<ul>
-<li>Tidy each book and then add <code>book</code> and <code>author</code> as variables and save each tibble to a new variable. How many rows are in each book?</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>Use a dplyr function to combine the two tibbles into a new tibble.</li>
-</ol>
-<ul>
-<li>It should have 89,434 rows with 6 variables</li>
-</ul>
-<ol start="5" style="list-style-type: decimal">
-<li>Measure the net sentiment using bing for each block of 50 lines</li>
-</ol>
-<ul>
-<li>Plot the sentiment for each book in an appropriate faceted plot - either line or column.</li>
-<li>Be sure to remove the legend.</li>
-<li>Save the plot to a variable</li>
-<li>Interpret the plots for each book and compare them.</li>
-</ul>
-<ol start="6" style="list-style-type: decimal">
-<li>Measure the total for each nrc sentiment in each block of 500 lines and then,</li>
-</ol>
-<ul>
-<li>Filter out the “positive” and “negative” and save to a new variable. You should have 464 observations.</li>
-<li>Plot the count of the sentiments for each block in each book in an appropriate faceted plot with the books in two columns and the sentiments in 8 rows.</li>
-<li>Be sure to remove the legend.</li>
-<li>Interpret the plots for each book and then compare them.</li>
-<li>Why did the values drop off so suddenly at the end?</li>
-</ul>
-<ol start="7" style="list-style-type: decimal">
-<li>Using bing, create a new data frame with the counts of the positive and negative sentiment words for each book.</li>
-</ol>
-<ul>
-<li>Show the “top 20” most frequent words across both books along with their book, sentiment, and count, in descending order by count.</li>
-<li>What are the positive words in the list of “top 20”?</li>
-</ul>
-<ol start="8" style="list-style-type: decimal">
-<li>Plot the top ten for each positive and negative sentiment faceting by book.</li>
-</ol>
-<ul>
-<li>Ensure each facet has the words in the proper order for that book.</li>
-<li>Identify any that may be inappropriate for the context of the book and should be excluded from the sentiment analysis.</li>
-</ul>
-<ol start="9" style="list-style-type: decimal">
-<li>Remove the inappropriate word(s) from the analysis.</li>
-</ol>
-<ul>
-<li>Replot the top 10 for each sentiment per book from step 8.</li>
-<li>Interpret the plots</li>
-</ul>
-<ol start="10" style="list-style-type: decimal">
-<li>Rerun the analysis from step 5 and recreate the plot with the title “Custom Bing”.</li>
-</ol>
-<ul>
-<li>Show both the original step 5 plot with the new plot in the same output graphic, one on top of the other.</li>
-<li>Interpret the plots</li>
-</ul>
-</div>
-<div id="tf-idf-for-mark-twains-books" class="section level1" number="2">
-<h1 number="2"><span class="header-section-number">2</span> tf-idf for Mark Twain’s books</h1>
-<ol style="list-style-type: decimal">
-<li>Use a single call to download all the following complete books at once from author Mark Twain from Project Gutenberg</li>
-</ol>
-<ul>
-<li>Use the meta_fields argument to include the Book title as part of the download</li>
-<li><em>Huckleberry Finn</em>, <em>Tom Sawyer</em> , <em>Connecticut Yankee in King Arthur’s Court</em>, <em>Life on the Mississippi</em> , <em>Prince and the Pauper</em>, and <em>A Tramp Abroad</em></li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li>Modify your earlier function or create a new one to output a tf-idf ready dataframe (<strong>leave the the stop words in the text</strong>)</li>
-</ol>
-<ul>
-<li>Unnest, remove any formatting, and get rid of any <code>NA</code>s<br />
-</li>
-<li>Add the count for each word by title.</li>
-<li>Use your function to tidy the downloaded texts and save to a variable. It should have 56,759 rows.</li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Calculate the tf-idf</li>
-</ol>
-<ul>
-<li>Save back to the data frame.</li>
-</ul>
-<ol start="4" style="list-style-type: decimal">
-<li>Plot the tf for each book using a faceted graph.</li>
-</ol>
-<ul>
-<li>Facet by book and constrain the data or the X axis to see the shape of the distribution.</li>
-</ul>
-<ol start="5" style="list-style-type: decimal">
-<li>Show the words with the 15 highest tf-idfs across across all books</li>
-</ol>
-<ul>
-<li>Only show those rows.</li>
-<li>How many look like possible names?</li>
-</ul>
-<ol start="6" style="list-style-type: decimal">
-<li>Plot the top 7 tf_idf words from each book.</li>
-</ol>
-<ul>
-<li>Sort in descending order of tf_idf</li>
-<li>Interpret the plots.</li>
-</ul>
-</div>
-<div id="extra-credit-podcasts" class="section level1" number="3">
-<h1 number="3"><span class="header-section-number">3</span> Extra Credit Podcasts</h1>
-<ul>
-<li>Choose <strong>One</strong> of the following podcasts and answer the questions below:</li>
-</ul>
-<ol style="list-style-type: lower-alpha">
-<li><p><a href="https://podcasts.apple.com/us/podcast/data-skeptic/id890348705?i=1000483067378">Sentiment Preserving Fake Reviews</a><br />
-The <a href="https://arxiv.org/abs/1907.09177">Original paper</a></p></li>
-<li><p><a href="https://podcasts.apple.com/us/podcast/authorship-attribution-of-lennon-mccartney-songs/id890348705?i=1000485519404">Data in Life: Authorship Attribution in Lennon-McCartney Songs</a></p></li>
-</ol>
-<ol style="list-style-type: decimal">
-<li><p>What are some key ideas from this podcast relevant to text sentiment analysis/authorship attribution?</p></li>
-<li><p>How do you think the ideas discussed may be relevant in your future work?</p></li>
-</ol>
 </div>
 
 
