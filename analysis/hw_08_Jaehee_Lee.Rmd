@@ -299,3 +299,20 @@ title_info[[1]]
 gutenberg_download(c(title_info[[1]]), meta_fields = "title") -> complete_books
 ```
 
+2. Modify your earlier function or create a new one to output a tf-idf ready dataframe (**leave the stop words in the text**)
+- Unnest, remove any formatting, and get rid of any `NA`s  
+- Add the count for each word by title.
+- Use your function to tidy the downloaded texts and save to a variable. It should have 56,759 rows.
+```{r}
+new_function <- function(complete_books){
+  complete_books %>% 
+  unnest_tokens(word, text) %>%
+  mutate(word = str_extract(word, "[a-z']+")) %>%
+  count(word, title, sort = TRUE) %>%  
+    drop_na()-> tf_idf_data
+  
+ return(tf_idf_data)
+}
+
+book_words <-  new_function(complete_books)
+```
