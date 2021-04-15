@@ -316,3 +316,10 @@ new_function <- function(complete_books){
 
 book_words <-  new_function(complete_books)
 ```
+
+3. Calculate the tf-idf
+- Save back to the data frame.
+```{r}
+book_words %>% 
+    bind_tf_idf(word, title, n) -> book_words 
+```
