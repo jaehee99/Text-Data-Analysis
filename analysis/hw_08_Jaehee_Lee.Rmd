@@ -330,5 +330,15 @@ book_words %>%
 ggplot(book_words, aes(tf, fill = title)) +
   geom_histogram(show.legend = FALSE) +
   xlim(NA, 0.0009) +
-  facet_wrap(~title, ncol = 2, scales = "free_y")
+  facet_wrap(~title, ncol = 2, scales = "free_y") 
+```
+
+5. Show the words with the 15 highest tf-idfs across across all books
+- Only show those rows.
+- How many look like possible names?
+```{r}
+book_words %>% 
+  arrange(desc(tf_idf)) %>%  
+  head(15) %>%  
+  select(word) 
 ```
