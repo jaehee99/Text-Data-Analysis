@@ -33,4 +33,29 @@ knitr::opts_chunk$set(fig.align  = "center",
 - Use Pull requests and or email to ask me any questions. If you email, please ensure your most recent code is pushed to GitHub.
 
 
+# Sentiment Analysis
+
+Load library
+```{r}
+library(tidyverse)
+library(tidytext)
+library(stringr)
+```
+
+1. Download the following two works from the early 20^th^ century from Project Gutenberg:
+- Upton Sinclair: "*The Jungle*" (1906)
+- W.E.B. Du Bois: "*The Quest of the Silver Fleece*" (1911)
+```{r}
+library(gutenbergr)
+# Upton Sinclair: "*The Jungle*" (1906)
+gutenberg_works() %>%  
+  filter(title == "The Jungle") %>%  
+  select(gutenberg_id) -> jungle_id
+gutenberg_download(jungle_id) -> jungle
+# W.E.B. Du Bois: "*The Quest of the Silver Fleece*" (1911)
+gutenberg_works() %>%  
+  filter(title == "The Quest of the Silver Fleece: A Novel")  %>% 
+  select(gutenberg_id) -> silver_id
+gutenberg_download(silver_id) -> silver
+```
 
