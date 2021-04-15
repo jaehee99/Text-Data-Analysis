@@ -151,3 +151,23 @@ jungle_silver %>%
 compare_sentiment
 ```
 Interpretation: Both of the books have significantly more negative sentiments compared to positive sentiments. This is because most of the lines are below 0. However, when we compare two graphs, it seems like "The Quest of the Silver Fleece" have more positive words than "the Jungle".
+
+6. Measure the total for each nrc sentiment in each block of 500 lines and then,
+- Filter out the "positive" and "negative" and save to a new variable. You should have 464 observations.
+- Plot the count of the sentiments for each block in each book in an appropriate faceted plot with the books in two columns and the sentiments in 8 rows. 
+- Be sure to remove the legend.
+- Interpret the plots for each book and then compare them. 
+- Why did the values drop off so suddenly at the end?
+```{r}
+get_sentiments("nrc") %>%  
+  filter(sentiment != "positive" & sentiment != "negative") -> removed_data
+
+jungle_silver %>%  
+       inner_join(removed_data, by = "word") %>%  
+      count(book, index = linenumber %/% 500, sentiment) -> observations
+observations %>%  
+  ggplot(aes(index, n, fill = sentiment)) + 
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book,scales = "free_y") 
+```
+
