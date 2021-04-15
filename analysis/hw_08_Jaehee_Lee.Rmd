@@ -170,4 +170,15 @@ observations %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~book,scales = "free_y") 
 ```
+7. Using bing, create a new data frame with the counts of the positive and negative sentiment words for each book.
+- Show the "top 20" most frequent words across both books along with their book, sentiment, and count, in descending order by count.
+- What are the positive words in the list of "top 20"?
+```{r}
+jungle_silver %>%  
+  inner_join(get_sentiments("bing")) %>% 
+  count(book, word, sentiment, sort = TRUE) -> bing_pos_neg
 
+bing_pos_neg %>%  
+    top_n(20) %>%  
+    filter(sentiment == "positive") 
+```
