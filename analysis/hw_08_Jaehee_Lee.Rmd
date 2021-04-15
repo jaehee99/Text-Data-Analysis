@@ -342,3 +342,24 @@ book_words %>%
   head(15) %>%  
   select(word) 
 ```
+becky, huck, canty, joe seem like possible names. Therefore, 4 looks like possible names among the above result.
+
+6.  Plot the top 7 tf_idf words from each book.
+- Sort in descending order of tf_idf
+- Interpret the plots.
+```{r}
+show <- book_words %>%
+  group_by(title) %>%
+  slice_max(tf_idf, n = 7) %>% 
+  ungroup() %>%
+  arrange(title, -tf_idf)
+
+show %>%
+  mutate(term = reorder_within(word, tf_idf, title)) %>%
+  ggplot(aes(tf_idf, term, fill = factor(title))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ title, scales = "free") +
+  scale_y_reordered()
+```
+
+Interpretation: tf-idf is to find out what words are important in the book. Above results show that Mark Twain used similar words throughout the six books. Among these 6 books, what distinguishes the one book and another is the name of the character/place of the background. That is why we use tf-idf. tf-idf helps to find out which book is what based on the words that are important in the book and mostly it is distinguished by the proper nouns. For example, we can assume that the book "the adventures of Tom Sawyer" main character is becky since it is the most frequently used. Also, the book "The Prince and the Pauer" main place is hendon since it is the most frequently used. So we can think if the book has the most frequent word is becky then the book will be the adventrue of Tom Sawyer.  
