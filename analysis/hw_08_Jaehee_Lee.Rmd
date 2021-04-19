@@ -131,6 +131,7 @@ nrow(new_silver)
 bind_rows(mutate(new_jungle, author = "Upton Sinclair"), 
           mutate(new_silver, author = "W.E.B. Du Bois")) -> jungle_silver
 nrow(jungle_silver)
+ncol(jungle_silver)
 ```
 
 5. Measure the net sentiment using bing for each block of 50 lines
@@ -156,8 +157,6 @@ Interpretation: Both of the books have significantly more negative sentiments co
 - Filter out the "positive" and "negative" and save to a new variable. You should have 464 observations.
 - Plot the count of the sentiments for each block in each book in an appropriate faceted plot with the books in two columns and the sentiments in 8 rows. 
 - Be sure to remove the legend.
-- Interpret the plots for each book and then compare them. 
-- Why did the values drop off so suddenly at the end?
 ```{r}
 get_sentiments("nrc") %>%  
   filter(sentiment != "positive" & sentiment != "negative") -> removed_data
@@ -170,6 +169,23 @@ observations %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~book,scales = "free_y") 
 ```
+- Interpret the plots for each book and then compare them. 
+These are stacked bar plots showing to compare the total and also see the changes for sentiment level. 
+We can see that for the book Jungle, for each index there is around average 700-750 sentiments for each index. 
+We can see that for the book Quest Silver, for each index there is around average 500-600 sentiments for each index. Exception for few index, most of the sentiments in each index,have similar amount of sentiments.
+We can see that the values drop off so suddenly at the end for the Jungle book. I will explain this in the next question. 
+
+- Why did the values drop off so suddenly at the end?
+
+In the Jungle graph, we can see that at the end the values drop off so suddenly. 
+This is because of the index and linenumber. To be specific: 
+In the Jungle there are 28 index, 14027 line numbers. 
+500 * 28 = 14000, 14027 - 14000 so there are 27 lines left.
+In the Quest Silver book there are 28 index, 14489 line numbers. 
+500 * 28 = 14000, 14489 - 14000 so there are 489 lines left.
+Therefore, we can see that for the last part drop suddenly in the Jungle book because there are only 27 lines for the word to show the sentiment, whereas other parts for each index have 500 lines. 
+However, the book Quest Silver didn't drop at the end, this is because, the left lines are 489 lines, therefore this is almost 500lines, that is why the height is similar with other parts. 
+
 7. Using bing, create a new data frame with the counts of the positive and negative sentiment words for each book.
 - Show the "top 20" most frequent words across both books along with their book, sentiment, and count, in descending order by count.
 - What are the positive words in the list of "top 20"?
